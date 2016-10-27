@@ -1,0 +1,18 @@
+﻿<UserControl x:Class="SoapTest.Views.CafeteriaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SoapTest.Views"
+             mc:Ignorable="d" 
+      
+             VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Loaded="UserControl_Loaded" Background="White">
+    
+    <Grid >
+        <ScrollViewer>
+            <Grid HorizontalAlignment="Left" >
+                <StackPanel Name="gridFoodList"></StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
