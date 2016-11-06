@@ -1,4 +1,5 @@
-﻿using SoapTest.Model;
+﻿using CukurovaUniversiteli.Helper;
+using SoapTest.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -34,31 +35,14 @@ namespace SoapTest.Database
 
         private static FoodDatabase instance;
 
-        private SqlCommand command;
-
-        FoodDatabase()
-        {
-            command = new SqlCommand();
-            command.CommandType = CommandType.StoredProcedure;
-            command.Connection = StaticModel.CuSqlConnection;
-            command.CommandText = "food_process";
-        }
-
         public List<DailyMenu> GetMenuList()
         {
             List<DailyMenu> menuList = new List<DailyMenu>();
 
-            command.Parameters.AddWithValue("@processType", Process.Select);
-            command.Parameters.AddWithValue("@date", DateTime.Now);
-
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable();
-
-            StaticModel.CuSqlConnection.Open();
-            adapter.Fill(dataTable);
-            StaticModel.CuSqlConnection.Close();
-
-            command.Parameters.Clear();
+            DataTable dataTable = ProcedureManager.Prepare("food_process")
+                .AddValue("processType", Process.Select)
+                .AddValue("date", DateTime.Now.AddDays(-20))
+                .ExecuteAndReturnValue();
 
             DailyMenu currentMenu = null;
             for (int i = 0; i < dataTable.Rows.Count; i++)
@@ -99,46 +83,29 @@ namespace SoapTest.Database
         {
             foreach (Food food in menu.foods)
             {
-                command.Parameters.AddWithValue("@processType", Process.Insert);
-                command.Parameters.AddWithValue("@date", menu.date);
-                command.Parameters.AddWithValue("@name", food.name);
-                command.Parameters.AddWithValue("@calorie", food.calorie);
-                command.Parameters.AddWithValue("@contents", food.contents);
-                command.Parameters.AddWithValue("@image_src", food.imageSrc);
-
-                StaticModel.CuSqlConnection.Open();
-                command.ExecuteNonQuery();
-                StaticModel.CuSqlConnection.Close();
-
-                command.Parameters.Clear();
+                ProcedureManager.Prepare("food_process")
+                    .AddValue("processType", Process.Insert)
+                    .AddValue("date", menu.date)
+                    .AddValue("name", food.name)
+                    .AddValue("calorie", food.calorie)
+                    .AddValue("contents", food.contents)
+                    .AddValue("image_src", food.imageSrc)
+                    .Execute();
             }
         }
 
         public void ClearMenuList()
         {
-            command.Parameters.AddWithValue("@processType", Process.Truncate);
-
-            StaticModel.CuSqlConnection.Open();
-            command.ExecuteNonQuery();
-            StaticModel.CuSqlConnection.Close();
-
-            command.Parameters.Clear();
+            ProcedureManager.Prepare("food_process")
+                    .AddValue("processType", Process.Truncate)
+                    .Execute();
         }
 
         public int MenuCount()
         {
-            command.Parameters.AddWithValue("@processType", Process.Count);
-
-            SqlDataAdapter adapter = new SqlDataAdapter(command);
-            DataTable dataTable = new DataTable();
-
-            StaticModel.CuSqlConnection.Open();
-            adapter.Fill(dataTable);
-            StaticModel.CuSqlConnection.Close();
-
-            command.Parameters.Clear();
-
-            return (int)dataTable.Rows[0][0];
+            return (int) ProcedureManager.Prepare("food_process")
+                    .AddValue("processType", Process.Count)
+                    .ExecuteAndReturnValue().Rows[0][0];
         }
     }
 }
