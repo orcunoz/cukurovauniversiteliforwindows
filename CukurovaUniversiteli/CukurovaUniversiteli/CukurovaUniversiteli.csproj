@@ -76,7 +76,7 @@
     </ApplicationDefinition>
     <Compile Include="Controllers\CallFoodList.cs" />
     <Compile Include="Database\FoodDatabase.cs" />
-    <Compile Include="Helper\SqlProcess.cs" />
+    <Compile Include="Helper\ProcedureManager.cs" />
     <Compile Include="Model\StaticModel.cs" />
     <Compile Include="Views\FoodListView.xaml.cs">
       <DependentUpon>FoodListView.xaml</DependentUpon>

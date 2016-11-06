@@ -12,10 +12,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SoapTest.Model;
-using SoapTest.Database;
+using CukurovaUniversiteli.Model;
+using CukurovaUniversiteli.Database;
 
-namespace SoapTest.Views
+namespace CukurovaUniversiteli.Views
 {
     /// <summary>
     /// Interaction logic for FoodListView.xaml
@@ -108,11 +108,10 @@ namespace SoapTest.Views
                 Label lb = new Label();
                 lb.Content = food.name;
                 st.Children.Add(lb);
-                lb.AddHandler(Label.MouseDownEvent, new RoutedEventHandler((object sender, RoutedEventArgs e) =>
+                lb.AddHandler(MouseDownEvent, new RoutedEventHandler((object sender, RoutedEventArgs e) =>
                 {
                     MessageBox.Show(food.contents.Replace('|', '\n'));
                 }));
-                //lb.Triggers.Add();
             }
 
             st.Width = 200;

@@ -1,4 +1,4 @@
-﻿using SoapTest.Model;
+﻿using CukurovaUniversiteli.Model;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace SoapTest
+namespace CukurovaUniversiteli
 {
     /// <summary>
     /// Interaction logic for App.xaml

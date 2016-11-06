@@ -1,7 +1,7 @@
 ﻿
 using Newtonsoft.Json;
-using SoapTest.Database;
-using SoapTest.Model;
+using CukurovaUniversiteli.Database;
+using CukurovaUniversiteli.Model;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
@@ -20,7 +20,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace SoapTest
+namespace CukurovaUniversiteli
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
