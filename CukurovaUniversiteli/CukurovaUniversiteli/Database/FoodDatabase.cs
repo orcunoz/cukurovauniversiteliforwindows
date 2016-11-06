@@ -1,5 +1,5 @@
 ﻿using CukurovaUniversiteli.Helper;
-using SoapTest.Model;
+using CukurovaUniversiteli.Model;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -8,17 +8,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SoapTest.Database
+namespace CukurovaUniversiteli.Database
 {
     public class FoodDatabase
     {
-        enum Process
+        enum ProcessType
         {
             Select = 0,
             Insert = 1,
             Truncate = 2,
             Count = 3
         }
+
+        struct ProcedureFields
+        {
+            public const string ProcessType = "process_type";
+            public const string Date = "date";
+            public const string Name = "name";
+            public const string Calorie = "calorie";
+            public const string Contents = "contents";
+            public const string ImageSrc = "image_src";
+        }
+
+        public const string procedureName = "food_procedure";
 
         public static FoodDatabase Instance
         {
@@ -39,9 +51,9 @@ namespace SoapTest.Database
         {
             List<DailyMenu> menuList = new List<DailyMenu>();
 
-            DataTable dataTable = ProcedureManager.Prepare("food_process")
-                .AddValue("processType", Process.Select)
-                .AddValue("date", DateTime.Now.AddDays(-20))
+            DataTable dataTable = ProcedureManager.Prepare(procedureName)
+                .AddValue(ProcedureFields.ProcessType, ProcessType.Select)
+                .AddValue(ProcedureFields.Date, DateTime.Now.AddDays(-20))
                 .ExecuteAndReturnValue();
 
             DailyMenu currentMenu = null;
@@ -83,28 +95,28 @@ namespace SoapTest.Database
         {
             foreach (Food food in menu.foods)
             {
-                ProcedureManager.Prepare("food_process")
-                    .AddValue("processType", Process.Insert)
-                    .AddValue("date", menu.date)
-                    .AddValue("name", food.name)
-                    .AddValue("calorie", food.calorie)
-                    .AddValue("contents", food.contents)
-                    .AddValue("image_src", food.imageSrc)
+                ProcedureManager.Prepare(procedureName)
+                    .AddValue(ProcedureFields.ProcessType, ProcessType.Insert)
+                    .AddValue(ProcedureFields.Date, menu.date)
+                    .AddValue(ProcedureFields.Name, food.name)
+                    .AddValue(ProcedureFields.Calorie, food.calorie)
+                    .AddValue(ProcedureFields.Contents, food.contents)
+                    .AddValue(ProcedureFields.ImageSrc, food.imageSrc)
                     .Execute();
             }
         }
 
         public void ClearMenuList()
         {
-            ProcedureManager.Prepare("food_process")
-                    .AddValue("processType", Process.Truncate)
+            ProcedureManager.Prepare(procedureName)
+                    .AddValue(ProcedureFields.ProcessType, ProcessType.Truncate)
                     .Execute();
         }
 
         public int MenuCount()
         {
-            return (int) ProcedureManager.Prepare("food_process")
-                    .AddValue("processType", Process.Count)
+            return (int) ProcedureManager.Prepare(procedureName)
+                    .AddValue(ProcedureFields.ProcessType, ProcessType.Count)
                     .ExecuteAndReturnValue().Rows[0][0];
         }
     }
